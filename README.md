@@ -1,6 +1,6 @@
 # Snippetbox
 
-Yet another gist app written in Go learning from [Let's Go](https://letsgo.mancuoj.me) book.
+Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.me).
 
 ## 2.1
 
@@ -56,21 +56,21 @@ Yet another gist app written in Go learning from [Let's Go](https://letsgo.mancu
 ## 2.4
 
 - 405 Method not allowed
-- 一个请求只能调用一次 w.WriteHeader()
-- w.Write() 调用就相当于默认返回 200 成功了，所以写 header 要提前
-- w.Header().Set() 也要提前改
-- w.WriteHeader(405) and w.Write([]byte("Method Not Allowed"))
-  - shortcut http.Error(w, 405, "Method Not Allowed")
 - 尽量用 http 提供的常量
-- 每个请求，Go 会自动生成 Date Content-Length Content-Type 三个 header
+- 一个请求只能调用一次 `w.WriteHeader()`
+- 写 header 要提前，调用 `w.Write()` 就相当于默认返回 200 成功了
+- w.Header().Set() 也要提前
+- `w.WriteHeader(405) and w.Write([]byte("Method Not Allowed"))`
+  - 简写 `http.Error(w, 405, "Method Not Allowed")`
 
-  - Go 会通过 http.DetectContentType() 猜测 Content-Type
-  - 猜不出来就用 Content-Type: application/octet-stream
-  - 区分不了纯文本和 JSON，所以要手动设置 w.Header().Set("Content-Type", "application/json")
+- 每个请求，Go 会自动生成 `Date, Content-Length, Content-Type` 三个 header
+  - Go 会通过 `http.DetectContentType()` 猜测 Content-Type
+  - 猜不出来就用 `Content-Type: application/octet-stream`
+  - 区分不了纯文本和 JSON，所以要手动设置 `w.Header().Set("Content-Type", "application/json")`
 
-- Header()
-  - Set() Add() Del() Get() Values()
+- `Header()`
+  - `Set(), Add(), Del(), Get(), Values()`
   - 会通过` textproto.CanonicalMIMEHeaderKey()` 自动规范化
     - 大写开头，-连字符
     - `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}` 跳过规范
-  - Del 不会删除系统自动生成的 Header，使用`Nil，w.Header()["Date"] = nil` 
+  - Del 不会删除系统自动生成的 Header，使用`Nil，w.Header()["Date"] = nil`
