@@ -55,22 +55,14 @@ Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.m
 
 ## 2.4
 
-- 405 Method not allowed
-- 尽量用 http 提供的常量
-- 一个请求只能调用一次 `w.WriteHeader()`
-- 写 header 要提前，调用 `w.Write()` 就相当于默认返回 200 成功了
-- w.Header().Set() 也要提前
-- `w.WriteHeader(405) and w.Write([]byte("Method Not Allowed"))`
-  - 简写 `http.Error(w, 405, "Method Not Allowed")`
-
-- 每个请求，Go 会自动生成 `Date, Content-Length, Content-Type` 三个 header
-  - Go 会通过 `http.DetectContentType()` 猜测 Content-Type
-  - 猜不出来就用 `Content-Type: application/octet-stream`
-  - 区分不了纯文本和 JSON，所以要手动设置 `w.Header().Set("Content-Type", "application/json")`
-
-- `Header()`
-  - `Set(), Add(), Del(), Get(), Values()`
-  - 会通过` textproto.CanonicalMIMEHeaderKey()` 自动规范化
-    - 大写开头，-连字符
-    - `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}` 跳过规范
-  - Del 不会删除系统自动生成的 Header，使用`Nil，w.Header()["Date"] = nil`
+1. 405 Method not allowed，尽量用 http 提供的常量
+2. 一个请求只能调用一次 `w.WriteHeader()`
+3. 写 header 要提前，调用 `w.Write()` 就相当于默认返回 200 成功了，`w.Header().Set()` 也要提前
+4. `w.WriteHeader(405) and w.Write(...)` 简写为 `http.Error(w, 405, "Method Not Allowed")`
+5. 每个请求，Go 会自动生成 `Date, Content-Length, Content-Type` 三个 header
+6. Go 会通过 `http.DetectContentType()` 猜测 Content-Type，猜不出来就用 `Content-Type: application/octet-stream`
+7. 区分不了纯文本和 JSON，所以要手动设置 `w.Header().Set("Content-Type", "application/json")`
+8. `Header(), Set(), Add(), Del(), Get(), Values()`
+9. header 会通过` textproto.CanonicalMIMEHeaderKey()` 自动规范化，大写开头，`-` 连字符
+10. 使用 `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}` 跳过规范
+11. `Del()` 不能删除系统自动生成的 header，使用`Nil，w.Header()["Date"] = nil` 删除
