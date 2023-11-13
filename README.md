@@ -70,3 +70,20 @@ Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.m
 7. `ts.ExecuteTemplate(w, "base", nil)` use the base template you defined
 8. 用 `{{template xx .}}` 调用其他模板，使用 `{{block xx .}} {{end}}` 在调用模板不存在时显示默认内容
 9. `embed` 包可以将文件嵌入 Go 程序中，而不是从磁盘中读取，后面将说明
+
+## 2.8
+
+1. `http.FileServer` 通过 HTTP 从特定目录提供文件，处理 `/static/` 路由
+2. `fileServer := http.FileServer(http.Dir("./ui/static/"))` 删去前导路径
+3. `mux.Handle("/static/", http.StripPrefix("/static", fileServer))` 删去 static 前缀
+4. 搜索文件前，自动通过 `path.Clean()` 清除 `.` `..`
+5. 支持 Range Requests，大文件续传友好
+6. 支持 `Last-Modified` 和 `If-Modified-Since` 标头，如果文件自用户上次请求以来没有更改，则发送 304 Not Modified 状态码而不是文件本身
+7. Content-Type 是使用 `mime.TypeByExtension()` 函数从文件扩展名自动设置的，可以使用 `mime.AddExtensionType()` 函数添加自己的自定义扩展和内容类型
+
+```go
+func downloadHandler(w http.ResponseWriter, r *http.Request) {
+    // 不会自动清理路径，需手动 filepath.Clean()
+    http.ServeFile(w, r, "./ui/static/file.zip")
+}
+```
