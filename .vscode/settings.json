@@ -4,6 +4,7 @@
     "servemux",
     "snippetbox",
     "strconv",
-    "textproto"
+    "textproto",
+    "tmpl"
   ]
 }

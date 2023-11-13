@@ -44,7 +44,6 @@ Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.m
 10. 使用 `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}` 跳过规范
 11. `Del()` 不能删除系统自动生成的 header，使用`Nil，w.Header()["Date"] = nil` 删除
 
-
 ## 2.5
 
 1. `/snippet/view?id=1` query string
@@ -52,3 +51,22 @@ Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.m
 3. check positive integer `strconv.Atoi()`
 4. `io.Writer` type is an interface, `http.ResponseWriter` has a `w.Write()` method satisfies the interface
 5. in practice, see `io.Writer` interface, pass `http.ResponseWriter`, will be sent as the body of the HTTP response
+
+## 2.6
+
+1. project structure
+2. `cmd/` 特定于此 app 的代码
+3. `internal/` 不特定于此 app 的代码，潜在的可重用部分代码
+4. `ui/` user interface
+
+## 2.7
+
+1. use `html/template` to parse and render
+2. `template.ParseFiles("./ui/html/pages/home.tmpl.html")` get template set
+3. `ts.Execute(w, nil)` write template content as the response body, nil represents no dynamic data
+4. `{{define "base"}}  {{end}}`
+5. `{{template "title" .}}` and `{{template "main" .}}`
+6. `.` represents any dynamic data
+7. `ts.ExecuteTemplate(w, "base", nil)` use the base template you defined
+8. 用 `{{template xx .}}` 调用其他模板，使用 `{{block xx .}} {{end}}` 在调用模板不存在时显示默认内容
+9. `embed` 包可以将文件嵌入 Go 程序中，而不是从磁盘中读取，后面将说明
