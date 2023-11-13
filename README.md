@@ -87,3 +87,6 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "./ui/static/file.zip")
 }
 ```
+
+8. 通过增加空白 index.html 文件可以禁用文件夹目录列表，最简单也是最啥比的方法，最好通过自定义 `http.FileSystem` 来实现
+9. https://www.alexedwards.net/blog/disable-http-fileserver-directory-listings
