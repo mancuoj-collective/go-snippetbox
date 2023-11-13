@@ -43,3 +43,12 @@ Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.m
 9. header 会通过` textproto.CanonicalMIMEHeaderKey()` 自动规范化，大写开头，`-` 连字符
 10. 使用 `w.Header()["X-XSS-Protection"] = []string{"1; mode=block"}` 跳过规范
 11. `Del()` 不能删除系统自动生成的 header，使用`Nil，w.Header()["Date"] = nil` 删除
+
+
+## 2.5
+
+1. `/snippet/view?id=1` query string
+2. `r.URL.Query().Get()` return string value or empty `""`
+3. check positive integer `strconv.Atoi()`
+4. `io.Writer` type is an interface, `http.ResponseWriter` has a `w.Write()` method satisfies the interface
+5. in practice, see `io.Writer` interface, pass `http.ResponseWriter`, will be sent as the body of the HTTP response
