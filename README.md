@@ -4,54 +4,31 @@ Yet another gist app written in Go from book [Let's Go](https://letsgo.mancuoj.m
 
 ## 2.1
 
-- `go mod init x.x.x`
-- `go run .`
+1. `go mod init x.x.x`
+2. `go run .`
+3. `go run` - compile and execute binary in `/tmp`
+4. `go run .` - `go run main.go` - `go run snippetbox.hh` - `.` 代表当前文件夹
 
 ## 2.2
 
-- MVC
-- handler - controller - app logic, write http response headers and bodies
-- router(servemux) - map url patterns and handlers
-- web server - listen for requests
-
-- net/http
-- `*http.Request` 包含请求信息
-- `http.ResponseWriter`
-- `http.ListenAndServe` - `ip:port`
-- `:http` or `:http-alt` - 没有设置端口就从 `/etc/services` 获取
-
-- 启动服务
-- 侦听端口
-- 接受新请求
-- 将请求传给 servemux
-- 检查 URL 路径
-- 派发给匹配的 handler
-
-- `/` 包罗万象，相当于通配符 `/**`
-- `go run` - compile and execute binary in /tmp
-  - `go run .`
-  - `go run main.go`
-  - `go run snippetbox.hh`
-- `.` 代表当前文件夹
+1. MVC
+2. handler - controller - app logic, write http response headers and bodies
+3. router(servemux) - map url patterns and handlers
+4. web server - listen for requests
+5. net/http
+6. `*http.Request` 包含请求信息
+7. `http.ResponseWriter`
+8. `http.ListenAndServe` - `ip:port`
+9. `:http` or `:http-alt` - 没有设置端口就从 `/etc/services` 获取
+10. 启动服务 -> 侦听端口 -> 接受新请求 -> 将请求传给 servemux -> 检查 URL 路径 -> 派发给匹配的 handler
+11. `/` 包罗万象，相当于通配符 `/**`
 
 ## 2.3
 
-- / home
-- /snippet/view snippetView
-- /snippet/create snippetCreate
-
-- url patterns - fixed paths and subtree paths (end with a trailing slash / )
-  - subtree paths - `/foo` will automatically redirected `/foo/`
-- 更长的路径优先级更高
-
-- hostname matching
-- `mux.HandleFunc("foo.example.org/", fooHandler)`
-- `mux.HandleFunc("bar.example.org/", barHandler)`
-
-- servemux is pretty lightweight
-  - no request method
-  - no variables
-  - no regex
+1. url patterns - fixed paths and subtree paths (end with a trailing slash / )
+2. subtree paths - `/foo` will automatically redirected `/foo/`
+3. 更长的路径优先级更高
+4. servemux is pretty lightweight, no request method, no variables, no regex
 
 ## 2.4
 
