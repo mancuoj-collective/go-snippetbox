@@ -111,3 +111,13 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 10. `flag.StringVar(&cfg.addr, .....)` parse command-line flags into the memory address of pre-existing variables
 
 ## 3.2
+
+1. go standard logger 会默认信息前加上日期时间，然后写入 standard error stream，会显示在终端上
+2. log.Fatal 写入后还会调用 os.Exit(1) 退出
+3. INFO - information messages - stdout + prefix "INFO" - 文件描述符1 可省略
+4. ERROR - error messages - stderr + prefix "ERROR" + file name + line number - 文件描述符2
+5. 自定义 logger `errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)`
+6. log.Llongfile 包含完整文件路径，log.LUTC 输出 UTC 时间
+7. | bitwise or to join flags
+8. `go run ./cmd/web >>/tmp/info.log 2>>/tmp/error.log`，`>>` 追加模式，文件不存在时创建一个
+9. 创建一个带有 addr handler errorLog 的自定义 http.Server 结构体来调用 ListenAndServe
