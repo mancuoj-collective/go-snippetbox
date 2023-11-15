@@ -48,6 +48,6 @@ run: build
 run/live:
 	go run github.com/cosmtrek/air@latest \
 		--build.cmd "make build" --build.bin "/tmp/bin/${BINARY_NAME}" --build.delay "100" \
-		--build.exclude_dir "" \
+		--build.exclude_dir "tmp, .vscode, assets" \
 		--build.include_ext "go, tpl, tmpl, html, css, scss, js, ts, sql, jpeg, jpg, gif, png, bmp, svg, webp, ico" \
 		--misc.clean_on_exit "true"

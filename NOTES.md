@@ -87,3 +87,27 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 8. 通过增加空白 index.html 文件可以禁用文件夹目录列表，最简单也是最啥比的方法，最好通过自定义 `http.FileSystem` 来实现
 9. https://www.alexedwards.net/blog/disable-http-fileserver-directory-listings
 10. https://gist.github.com/alexedwards/3b40775846535d0014ab1ff477e4a568
+
+## 2.9
+
+1. handler 应该是满足 http.Handler interface 的，需要实现 `ServeHTTP(http.ResponseWriter, *http.Request)`
+2. `handleFunc()` 是一个语法糖，transform it into a handler, 给我们的普通函数自动添加了该函数，是我们可以直接传入
+3. `func ListenAndServe(addr string, handler Handler) error` 我们传递了 servemux 进去，本身不提供响应，将其传给第二个 handler
+4. 收到 http 请求，调用 servemux 的 ServeHTTP 方法，该方法通过 URL 路径找到对应 handler，然后再调用 handler 中的 ServeHTTP
+5. Go Web 就是一系列的调用 ServeHTTP 的过程
+6. 所有请求都会有一个单独的 goroutine 提供服务，服务繁忙时，可能会同时调用代码，访问共享资源时需要防止竞争
+
+## 3.1
+
+1. `addr := flag.String("addr", ":4000", "HTTP network address")` return a pointer, need reference `*`
+2. `-addr=":3333"` command-line flag, it's optional
+3. 自动转换为 String，不能转换就 log an error and exit
+4. flag.Int() Bool() Float64()
+5. `flag.Parse()` 读完必须 parse 一下才能用
+6. `-help` automatically help with flag
+7. `os.GetEnv()` 没有默认值，返回值只有字符串，没有自动的帮助信息
+8. `-flag=true` == `-flag`
+9. `-flag=false` 只有一种写法
+10. `flag.StringVar(&cfg.addr, .....)` parse command-line flags into the memory address of pre-existing variables
+
+## 3.2
