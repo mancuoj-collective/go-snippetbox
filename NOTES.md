@@ -121,3 +121,15 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 7. | bitwise or to join flags
 8. `go run ./cmd/web >>/tmp/info.log 2>>/tmp/error.log`，`>>` 追加模式，文件不存在时创建一个
 9. 创建一个带有 addr handler errorLog 的自定义 http.Server 结构体来调用 ListenAndServe
+
+
+## 3.3
+
+1. put dependencies into a custom `application` struct
+2. then define your handler as methods against `application`
+3. https://www.alexedwards.net/blog/organising-database-access
+
+## 3.4
+
+1. debug.Stack() get a stack trace for the current goroutine and append it to the log message
+2. 
