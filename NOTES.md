@@ -279,3 +279,13 @@ DROP TABLE snippets;
    5. DECIMAL NUMERIC -> float
    6. TIME DATE TIMESTAMP -> time.Time，需要使用 parseTime=true，否则返回 `[]byte`
 5. `errors.Is()` 
+
+
+## 4.8
+
+1. 多项查询
+2. `SELECT id, title, content, created, expires FROM snippets WHERE expires > UTC_TIMESTAMP() ORDER BY id DESC LIMIT 10`
+3. 返回的 sql.rows 需要关闭
+4. rows.Next() 迭代完成会自动关闭，但我们不能假定拿到了数据
+5. rows.Err() 检查迭代是否有错误
+6. 最后 defer 再手动关闭一次
