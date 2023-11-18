@@ -268,3 +268,14 @@ DROP TABLE snippets;
 
 ## 4.7
 
+1. `SELECT id, title, content, created, expires FROM snippets WHERE expires > UTC_TIMESTAMP() AND id = ?`
+2. `row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)`
+3. Scan copies the columns from the matched row into the values pointed at by dest. If more than one row matches the query, Scan uses the first row and discards the rest. If no row matches the query, Scan returns ErrNoRows.
+4. 会将 SQL 数据库原始数据转换为 Go 需要的类型
+   1. CHAR VARCHAR TEXT -> string
+   2. BOOLEAN -> bool
+   3. INT -> int
+   4. BIGINT -> int64
+   5. DECIMAL NUMERIC -> float
+   6. TIME DATE TIMESTAMP -> time.Time，需要使用 parseTime=true，否则返回 `[]byte`
+5. `errors.Is()` 
