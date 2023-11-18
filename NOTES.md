@@ -248,3 +248,10 @@ DROP TABLE snippets;
 7. `defer db.Close()` 关闭
 
 ## 4.5
+
+1. database model - service layer - access layer
+2. another package
+3. `internal/models`
+4. internal 目录非应用程序特定使用的代码，可能会被重用
+5. 新建 `SnippetModel` 实现方法，然后作为依赖导入 main 的 app 结构共同使用
+6. a clean separations of concern 数据库逻辑和处理程序无关
