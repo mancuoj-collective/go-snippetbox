@@ -255,3 +255,16 @@ DROP TABLE snippets;
 4. internal 目录非应用程序特定使用的代码，可能会被重用
 5. 新建 `SnippetModel` 实现方法，然后作为依赖导入 main 的 app 结构共同使用
 6. a clean separations of concern 数据库逻辑和处理程序无关
+
+
+## 4.6
+
+1. DB.Query() return multiple rows (Select)
+2. DB.QueryRow() return a single row (Select)
+3. DB.exec() don't return rows (Insert and Delete)
+4. `INSERT INTO snippets (title, content, created, expires) VALUES(?, ?, UTC_TIMESTAMP(), DATE_ADD(UTC_TIMESTAMP(), INTERVAL ? DAY))`
+5. `sql.Result`
+6. handlers 中调用 app 中注册的 snippets.DB 实例中的方法
+
+## 4.7
+
