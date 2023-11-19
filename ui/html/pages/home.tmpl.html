@@ -1,3 +1,4 @@
+File: ui/html/pages/home.tmpl
 {{define "title"}}Home{{end}}
 
 {{define "main"}}
@@ -12,7 +13,7 @@
         {{range .Snippets}}
         <tr>
             <td><a href='/snippet/view?id={{.ID}}'>{{.Title}}</a></td>
-            <td>{{.Created}}</td>
+            <td>{{.Created | humanDate}}</td>
             <td>#{{.ID}}</td>
         </tr>
         {{end}}
