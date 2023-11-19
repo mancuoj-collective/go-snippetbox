@@ -289,3 +289,25 @@ DROP TABLE snippets;
 4. rows.Next() 迭代完成会自动关闭，但我们不能假定拿到了数据
 5. rows.Err() 检查迭代是否有错误
 6. 最后 defer 再手动关闭一次
+
+
+## 4.9
+
+1. database/sql 可以方便移植到任意数据库，但仍有些特性和边缘情况需要实现了解修改
+2. rows.Scan 不能处理 null 值，所以最好设为 not null
+3. 对 Exec() 、 Query() 和 QueryRow() 的调用可以使用 sql.DB 池中的任何连接
+4. 为了保证相同的连接，多个语句可以包在一个 transaction 中
+5. `tx, err := m.DB.Begin()` 用 tx 来查询数据库，后面 `tx.Commit()`
+6. `defer tx.Rollback()` 所有语句都执行成功，后者任意一个失败
+7. `DB.Prepare()` 创建可重用的 sql statement
+
+# 5
+
+1. pass dynamic data to html templates
+2. actions and functions in html/template
+3. handle template rendering errors
+4. 大概看看，后面前端分离，Go 只做 API
+
+
+
+
