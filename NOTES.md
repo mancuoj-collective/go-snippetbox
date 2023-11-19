@@ -375,3 +375,19 @@ X-XSS-Protection: 0
 | GET    | /snippet/create   | snippetCreate     | Display a HTML form for creating a new snippet |
 | POST   | /snippet/create   | snippetCreatePost | Create a new snippet                           |
 | GET    | /static/          | http.FileServer   | Serve a specific static file                   |
+
+# 8
+
+1. parse and access form data sent in a POST request
+2. validation checks
+3. validation failures and re-populating form fields with previously submitted data
+
+## 8.2
+
+- r.ParseForm()
+- r.PostForm
+- r.PostForm.Get()
+- r.Form()
+- r.PostFormValue() = parse + get
+- r.PostForm["items"] 对应多值字段，不能用 Get
+- `r.Body = http.MaxBytesReader(w, r.Body, 4096)` 更改表单大小限制 4096bytes
