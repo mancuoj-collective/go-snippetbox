@@ -308,6 +308,57 @@ DROP TABLE snippets;
 3. handle template rendering errors
 4. 大概看看，后面前端分离，Go 只做 API
 
+# 6
+
+on every http responses: 
+
+1. custom middleware
+2. set useful security headers
+3. logs the request
+4. recover panics
+5. middleware chains
+
+## 6.1
+
+1. “You can think of a Go web application as a chain of ServeHTTP() methods being called one after another.”
+2. servemux -> middleware -> handler
+3. position is important
+4. middleware -> servemux -> handler
+
+```go
+func myMiddleware(next http.Handler) http.Handler {
+    fn := func(w http.ResponseWriter, r *http.Request) {
+        // TODO: Execute our middleware logic here...
+        next.ServeHTTP(w, r)
+    }
+
+    return http.HandlerFunc(fn)
+
+    // anonymous  
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // TODO: Execute our middleware logic here...
+        next.ServeHTTP(w, r)
+    })
+}
+```
 
 
+3. return a handler execute some logic, then calls the next handler
 
+
+## 6.2
+
+```
+Content-Security-Policy: default-src 'self'; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com
+Referrer-Policy: origin-when-cross-origin
+X-Content-Type-Options: nosniff
+X-Frame-Options: deny
+X-XSS-Protection: 0
+```
+
+1. some HTTP security headers
+2. secureHeaders -> servemux -> application handler -> servemux -> secureHeaders
+3. In any middleware handler, code which comes before next.ServeHTTP() will be executed on the way down the chain, and any code after next.ServeHTTP() — or in a deferred function — will be executed on the way back up
+4. you can return before you call next.ServeHTTP(), control will flow back upstream
+
+## 6.3
