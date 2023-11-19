@@ -361,4 +361,17 @@ X-XSS-Protection: 0
 3. In any middleware handler, code which comes before next.ServeHTTP() will be executed on the way down the chain, and any code after next.ServeHTTP() — or in a deferred function — will be executed on the way back up
 4. you can return before you call next.ServeHTTP(), control will flow back upstream
 
-## 6.3
+## 6.5
+
+- https://github.com/justinas/alice/blob/master/chain.go
+
+
+# 7
+
+| Method | Pattern           | Handler           | Action                                         |
+| :----- | :---------------- | :---------------- | :--------------------------------------------- |
+| GET    | /                 | home              | Display the home page                          |
+| GET    | /snippet/view/:id | snippetView       | Display a specific snippet                     |
+| GET    | /snippet/create   | snippetCreate     | Display a HTML form for creating a new snippet |
+| POST   | /snippet/create   | snippetCreatePost | Create a new snippet                           |
+| GET    | /static/          | http.FileServer   | Serve a specific static file                   |
