@@ -15,7 +15,6 @@
 3. `go run` - compile and execute binary in `/tmp`
 4. `go run .` - `go run main.go` - `go run snippetbox.hh` - `.` 代表当前文件夹
 
-
 ## 2.2
 
 1. MVC
@@ -132,14 +131,13 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 
 1. go standard logger 会默认信息前加上日期时间，然后写入 standard error stream，会显示在终端上
 2. log.Fatal 写入后还会调用 os.Exit(1) 退出
-3. INFO - information messages - stdout + prefix "INFO" - 文件描述符1 可省略
-4. ERROR - error messages - stderr + prefix "ERROR" + file name + line number - 文件描述符2
+3. INFO - information messages - stdout + prefix "INFO" - 文件描述符 1 可省略
+4. ERROR - error messages - stderr + prefix "ERROR" + file name + line number - 文件描述符 2
 5. 自定义 logger `errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)`
 6. log.Llongfile 包含完整文件路径，log.LUTC 输出 UTC 时间
 7. | bitwise or to join flags
 8. `go run ./cmd/web >>/tmp/info.log 2>>/tmp/error.log`，`>>` 追加模式，文件不存在时创建一个
 9. 创建一个带有 addr handler errorLog 的自定义 http.Server 结构体来调用 ListenAndServe
-
 
 ## 3.3
 
@@ -173,7 +171,6 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 3. 新建表
 4. 插入数据
 5. 增加用户，赋予权限
-
 
 ```sql
 -- sudo apt install mysql-server
@@ -256,7 +253,6 @@ DROP TABLE snippets;
 5. 新建 `SnippetModel` 实现方法，然后作为依赖导入 main 的 app 结构共同使用
 6. a clean separations of concern 数据库逻辑和处理程序无关
 
-
 ## 4.6
 
 1. DB.Query() return multiple rows (Select)
@@ -278,8 +274,7 @@ DROP TABLE snippets;
    4. BIGINT -> int64
    5. DECIMAL NUMERIC -> float
    6. TIME DATE TIMESTAMP -> time.Time，需要使用 parseTime=true，否则返回 `[]byte`
-5. `errors.Is()` 
-
+5. `errors.Is()`
 
 ## 4.8
 
@@ -289,7 +284,6 @@ DROP TABLE snippets;
 4. rows.Next() 迭代完成会自动关闭，但我们不能假定拿到了数据
 5. rows.Err() 检查迭代是否有错误
 6. 最后 defer 再手动关闭一次
-
 
 ## 4.9
 
@@ -310,7 +304,7 @@ DROP TABLE snippets;
 
 # 6
 
-on every http responses: 
+on every http responses:
 
 1. custom middleware
 2. set useful security headers
@@ -334,7 +328,7 @@ func myMiddleware(next http.Handler) http.Handler {
 
     return http.HandlerFunc(fn)
 
-    // anonymous  
+    // anonymous
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         // TODO: Execute our middleware logic here...
         next.ServeHTTP(w, r)
@@ -342,9 +336,7 @@ func myMiddleware(next http.Handler) http.Handler {
 }
 ```
 
-
 3. return a handler execute some logic, then calls the next handler
-
 
 ## 6.2
 
@@ -365,7 +357,6 @@ X-XSS-Protection: 0
 
 - https://github.com/justinas/alice/blob/master/chain.go
 
-
 # 7
 
 | Method | Pattern           | Handler           | Action                                         |
@@ -384,10 +375,33 @@ X-XSS-Protection: 0
 
 ## 8.2
 
-- r.ParseForm()
-- r.PostForm
-- r.PostForm.Get()
-- r.Form()
-- r.PostFormValue() = parse + get
-- r.PostForm["items"] 对应多值字段，不能用 Get
-- `r.Body = http.MaxBytesReader(w, r.Body, 4096)` 更改表单大小限制 4096bytes
+1. r.ParseForm()
+2. r.PostForm
+3. r.PostForm.Get()
+4. r.Form()
+5. r.PostFormValue() = parse + get
+6. r.PostForm["items"] 对应多值字段，不能用 Get
+7. `r.Body = http.MaxBytesReader(w, r.Body, 4096)` 更改表单大小限制 4096bytes
+
+# 9
+
+1. use session to share data(state) between HTTP requests for the same user
+2. session manager alexedwards/scs
+3. customize session behavior
+
+```sql
+USE snippetbox;
+
+-- a unique, randomly-generated, identifier
+-- binary large object
+-- auto delete expired sessions
+CREATE TABLE sessions (
+    token CHAR(43) PRIMARY KEY,
+    data BLOB NOT NULL,
+    expiry TIMESTAMP(6) NOT NULL
+);
+
+CREATE INDEX sessions_expiry_idx ON sessions (expiry);
+```
+
+# 10

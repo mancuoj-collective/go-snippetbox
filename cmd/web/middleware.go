@@ -27,6 +27,13 @@ func (c Chain) Then(h http.Handler) http.Handler {
 	return h
 }
 
+func (c Chain) ThenFunc(fn http.HandlerFunc) http.Handler {
+	if fn == nil {
+		return c.Then(nil)
+	}
+	return c.Then(fn)
+}
+
 func secureHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com")
