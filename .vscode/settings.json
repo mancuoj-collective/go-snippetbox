@@ -15,6 +15,7 @@
     "mysqlstore",
     "Natsume",
     "nosniff",
+    "nosurf",
     "servemux",
     "snippetbox",
     "Soseki",

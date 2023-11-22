@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/justinas/nosurf"
 )
 
 type Constructor func(http.Handler) http.Handler
@@ -34,6 +36,17 @@ func (c Chain) ThenFunc(fn http.HandlerFunc) http.Handler {
 	return c.Then(fn)
 }
 
+func (c Chain) Append(constructors ...Constructor) Chain {
+	newCons := make([]Constructor, 0, len(c.constructors)+len(constructors))
+	newCons = append(newCons, c.constructors...)
+	newCons = append(newCons, constructors...)
+	return Chain{newCons}
+}
+
+func (c Chain) Extend(chain Chain) Chain {
+	return c.Append(chain.constructors...)
+}
+
 func secureHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Security-Policy", "default-src 'self'; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com")
@@ -63,4 +76,27 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func (app *application) requireAuthentication(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !app.isAuthenticated(r) {
+			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+			return
+		}
+
+		w.Header().Add("Cache-Control", "no-store")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func noSurf(next http.Handler) http.Handler {
+	csrfHandler := nosurf.New(next)
+	csrfHandler.SetBaseCookie(http.Cookie{
+		HttpOnly: true,
+		Path:     "/",
+		Secure:   true,
+	})
+
+	return csrfHandler
 }

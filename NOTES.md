@@ -411,3 +411,20 @@ CREATE INDEX sessions_expiry_idx ON sessions (expiry);
 3. TLS settings
 4. set connection timeouts
 
+# 11
+
+- signup, login, logout
+- using Bcrypt to store user passwords
+- use middleware and sessions to verify the password
+- prevent CSRF attacks (cross-site request forgery)
+
+## 11.1
+
+| Method | Pattern           | Handler           | Action                                         |
+| :----- | :---------------- | :---------------- | :--------------------------------------------- |
+| GET    | /user/signup      | userSignup        | Display a HTML form for signing up a new user  |
+| POST   | /user/signup      | userSignupPost    | Create a new user                              |
+| GET    | /user/login       | userLogin         | Display a HTML form for logging in a user      |
+| POST   | /user/login       | userLoginPost     | Authenticate and login the user                |
+| POST   | /user/logout      | userLogoutPost    | Logout the user                                |
+
