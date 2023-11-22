@@ -16,6 +16,7 @@
     "Natsume",
     "nosniff",
     "nosurf",
+    "novalidate",
     "servemux",
     "snippetbox",
     "Soseki",
