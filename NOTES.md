@@ -405,3 +405,9 @@ CREATE INDEX sessions_expiry_idx ON sessions (expiry);
 ```
 
 # 10
+
+1. create self-signed TLS certificate
+2. HTTPS
+3. TLS settings
+4. set connection timeouts
+
